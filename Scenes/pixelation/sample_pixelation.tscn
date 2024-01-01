@@ -1,0 +1,54 @@
+[gd_scene load_steps=11 format=3 uid="uid://8m4et4wfobwa"]
+
+[ext_resource type="Shader" path="res://Shaders/pixelation/screenSpacePixelation.gdshader" id="1_8s76m"]
+[ext_resource type="PackedScene" uid="uid://dccmty32s7xuk" path="res://Scenes/pixelation/pixelation_visualizer.tscn" id="1_rafu6"]
+[ext_resource type="Shader" path="res://Shaders/pixelation/texturePixelation.gdshader" id="2_mheju"]
+[ext_resource type="Texture2D" uid="uid://4ciggnupejuq" path="res://icon.svg" id="3_xsbgm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qic0s"]
+render_priority = 0
+shader = ExtResource("2_mheju")
+shader_parameter/_scale = 128.0
+shader_parameter/_tex = ExtResource("3_xsbgm")
+
+[sub_resource type="BoxMesh" id="BoxMesh_7hdh8"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_mnn72"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o8smg"]
+render_priority = 0
+shader = ExtResource("1_8s76m")
+shader_parameter/_scale = 256.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_nrske"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="Environment" id="Environment_famdf"]
+background_mode = 1
+background_color = Color(0.00392157, 0, 0.00392157, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+
+[node name="SamplePixelation" type="Node3D"]
+metadata/_edit_group_ = true
+
+[node name="Visualizer" parent="." instance=ExtResource("1_rafu6")]
+
+[node name="Cube" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_qic0s")
+mesh = SubResource("BoxMesh_7hdh8")
+skeleton = NodePath("../ScreenSpaceQuad")
+
+[node name="Sphere" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+mesh = SubResource("SphereMesh_mnn72")
+skeleton = NodePath("../ScreenSpaceQuad")
+
+[node name="ScreenSpaceQuad" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0128659, 0, -0.724838)
+material_override = SubResource("ShaderMaterial_o8smg")
+mesh = SubResource("QuadMesh_nrske")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_famdf")

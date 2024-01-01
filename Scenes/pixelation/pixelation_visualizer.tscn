@@ -1,0 +1,260 @@
+[gd_scene load_steps=11 format=3 uid="uid://dccmty32s7xuk"]
+
+[ext_resource type="Shader" path="res://Shaders/pixelation/screenSpacePixelationVisualizer.gdshader" id="1_7t2gx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2fpt0"]
+render_priority = 0
+shader = ExtResource("1_7t2gx")
+shader_parameter/_scale = 5.0
+shader_parameter/_e_scale = false
+shader_parameter/_e_floor = false
+shader_parameter/_e_div = false
+shader_parameter/_e_screen = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_stqxd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ssj2g"]
+render_priority = 0
+shader = ExtResource("1_7t2gx")
+shader_parameter/_scale = 5.0
+shader_parameter/_e_scale = true
+shader_parameter/_e_floor = false
+shader_parameter/_e_div = false
+shader_parameter/_e_screen = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7cfst"]
+render_priority = 0
+shader = ExtResource("1_7t2gx")
+shader_parameter/_scale = 5.0
+shader_parameter/_e_scale = true
+shader_parameter/_e_floor = true
+shader_parameter/_e_div = false
+shader_parameter/_e_screen = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rtjox"]
+render_priority = 0
+shader = ExtResource("1_7t2gx")
+shader_parameter/_scale = 5.0
+shader_parameter/_e_scale = true
+shader_parameter/_e_floor = true
+shader_parameter/_e_div = true
+shader_parameter/_e_screen = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2icsh"]
+render_priority = 0
+shader = ExtResource("1_7t2gx")
+shader_parameter/_scale = 10.0
+shader_parameter/_e_scale = false
+shader_parameter/_e_floor = false
+shader_parameter/_e_div = false
+shader_parameter/_e_screen = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jt6th"]
+render_priority = 0
+shader = ExtResource("1_7t2gx")
+shader_parameter/_scale = 10.0
+shader_parameter/_e_scale = true
+shader_parameter/_e_floor = false
+shader_parameter/_e_div = false
+shader_parameter/_e_screen = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ioee7"]
+render_priority = 0
+shader = ExtResource("1_7t2gx")
+shader_parameter/_scale = 10.0
+shader_parameter/_e_scale = true
+shader_parameter/_e_floor = true
+shader_parameter/_e_div = false
+shader_parameter/_e_screen = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p5j61"]
+render_priority = 0
+shader = ExtResource("1_7t2gx")
+shader_parameter/_scale = 10.0
+shader_parameter/_e_scale = true
+shader_parameter/_e_floor = true
+shader_parameter/_e_div = true
+shader_parameter/_e_screen = true
+
+[node name="Visualizer" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Labels" type="Node3D" parent="."]
+
+[node name="ScreenSpace" type="Label3D" parent="Labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, 0)
+text = "ScreenSpace
+"
+
+[node name="ObjectSpace" type="Label3D" parent="Labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 1, 0)
+text = "ObjectSpace"
+
+[node name="PixelationVisualizerUV" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+metadata/_edit_group_ = true
+
+[node name="UVScreenSpaceQuad" type="MeshInstance3D" parent="PixelationVisualizerUV"]
+material_override = SubResource("ShaderMaterial_2fpt0")
+mesh = SubResource("QuadMesh_stqxd")
+skeleton = NodePath("../../..")
+
+[node name="UV" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.811686, 0)
+text = "UV"
+
+[node name="Label3D3" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad/UV"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.456383, -0.243866, 0)
+pixel_size = 0.003
+text = "0"
+
+[node name="Label3D4" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad/UV"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.462254, -0.243866, 0)
+pixel_size = 0.003
+text = "1
+"
+
+[node name="UVScreenSpaceQuad2" type="MeshInstance3D" parent="PixelationVisualizerUV"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 0, 0)
+material_override = SubResource("ShaderMaterial_ssj2g")
+mesh = SubResource("QuadMesh_stqxd")
+skeleton = NodePath("../../..")
+
+[node name="UV2" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.81782, 0)
+text = "UV * 5"
+
+[node name="Label3D" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad2/UV2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.456383, -0.25, 0)
+pixel_size = 0.003
+text = "0"
+
+[node name="Label3D2" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad2/UV2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.462254, -0.25, 0)
+pixel_size = 0.003
+text = "5
+"
+
+[node name="UVScreenSpaceQuad3" type="MeshInstance3D" parent="PixelationVisualizerUV"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0, 0)
+material_override = SubResource("ShaderMaterial_7cfst")
+mesh = SubResource("QuadMesh_stqxd")
+skeleton = NodePath("../../..")
+
+[node name="UV3" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11949, 0)
+text = "floor(UV)"
+
+[node name="Label3D" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad3/UV3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.236733, 0)
+pixel_size = 0.003
+text = "leaves only 
+the integer values"
+
+[node name="Label3D3" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad3/UV3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.492441, -0.552, 0)
+pixel_size = 0.003
+text = "0"
+
+[node name="Label3D5" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad3/UV3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299275, -0.552, 0)
+pixel_size = 0.003
+text = "1"
+
+[node name="Label3D6" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad3/UV3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.10115, -0.552, 0)
+pixel_size = 0.003
+text = "2"
+
+[node name="Label3D7" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad3/UV3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0990572, -0.552, 0)
+pixel_size = 0.003
+text = "3"
+
+[node name="Label3D8" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad3/UV3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.294318, -0.552, 0)
+pixel_size = 0.003
+text = "4
+"
+
+[node name="Label3D4" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad3/UV3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.493691, -0.552, 0)
+pixel_size = 0.003
+text = "5
+"
+
+[node name="UVScreenSpaceQuad4" type="MeshInstance3D" parent="PixelationVisualizerUV"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, 0, 0)
+material_override = SubResource("ShaderMaterial_rtjox")
+mesh = SubResource("QuadMesh_stqxd")
+skeleton = NodePath("../../..")
+
+[node name="UV4" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.119, 0)
+text = "UV / 5"
+
+[node name="Label3D" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad4/UV4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.236733, 0)
+pixel_size = 0.003
+text = "UV must be from
+0 to 1"
+
+[node name="Label3D3" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad4/UV4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.495256, -0.552, 0)
+pixel_size = 0.003
+text = "0"
+
+[node name="Label3D5" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad4/UV4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.302091, -0.552, 0)
+pixel_size = 0.003
+text = "0.2
+"
+
+[node name="Label3D6" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad4/UV4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0983348, -0.552, 0)
+pixel_size = 0.003
+text = "0.4"
+
+[node name="Label3D8" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad4/UV4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.102477, -0.552, 0)
+pixel_size = 0.003
+text = "0.6
+"
+
+[node name="Label3D4" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad4/UV4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299439, -0.552, 0)
+pixel_size = 0.003
+text = "0.8
+"
+
+[node name="Label3D7" type="Label3D" parent="PixelationVisualizerUV/UVScreenSpaceQuad4/UV4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.499321, -0.552, 0)
+pixel_size = 0.003
+text = "1
+"
+
+[node name="PixelationVisualizeSCREEN" type="Node3D" parent="."]
+metadata/_edit_group_ = true
+
+[node name="UVScreenSpaceQuad" type="MeshInstance3D" parent="PixelationVisualizeSCREEN"]
+material_override = SubResource("ShaderMaterial_2icsh")
+mesh = SubResource("QuadMesh_stqxd")
+skeleton = NodePath("../../..")
+
+[node name="UVScreenSpaceQuad2" type="MeshInstance3D" parent="PixelationVisualizeSCREEN"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 0, 0)
+material_override = SubResource("ShaderMaterial_jt6th")
+mesh = SubResource("QuadMesh_stqxd")
+skeleton = NodePath("../../..")
+
+[node name="UVScreenSpaceQuad3" type="MeshInstance3D" parent="PixelationVisualizeSCREEN"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0, 0)
+material_override = SubResource("ShaderMaterial_ioee7")
+mesh = SubResource("QuadMesh_stqxd")
+skeleton = NodePath("../../..")
+
+[node name="UVScreenSpaceQuad4" type="MeshInstance3D" parent="PixelationVisualizeSCREEN"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, 0, 0)
+material_override = SubResource("ShaderMaterial_p5j61")
+mesh = SubResource("QuadMesh_stqxd")
+skeleton = NodePath("../../..")

@@ -1,0 +1,23 @@
+config_version=5
+
+[application]
+
+config/name="ScreenSpacePostProcessing"
+run/main_scene="res://Scenes/pixelation/sample_pixelation.tscn"
+config/features=PackedStringArray("4.2", "Forward Plus")
+config/icon="res://icon.svg"
+config/tags=PackedStringArray("learn", "shader")
+
+[dotnet]
+
+project/assembly_name="ScreenSpacePostProcessing"
+
+[file_customization]
+
+folder_colors={
+"res://Scenes/": "green",
+"res://Scenes/pixelation/": "green",
+"res://Scripts/": "orange",
+"res://Shaders/": "purple",
+"res://Shaders/pixelation/": "purple"
+}
