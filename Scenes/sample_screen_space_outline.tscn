@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://cpbercw628dcg"]
+
+[ext_resource type="Shader" path="res://Shaders/outline/outline.gdshader" id="1_gxg7d"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xt6b7"]
+render_priority = 0
+shader = ExtResource("1_gxg7d")
+shader_parameter/_Scale = 1.0
+shader_parameter/_DepthThreshold = 0.065
+shader_parameter/_NormalThreshold = 0.005
+
+[sub_resource type="QuadMesh" id="QuadMesh_5t1uy"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jl43m"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ggpub"]
+
+[node name="SampleScreenSpaceOutline" type="Node3D"]
+
+[node name="ScreenSpaceQuad" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_xt6b7")
+mesh = SubResource("QuadMesh_5t1uy")
+
+[node name="Cube" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_jl43m")
+
+[node name="Cube2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+mesh = SubResource("BoxMesh_jl43m")
+
+[node name="Cube3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("BoxMesh_jl43m")
+
+[node name="Cube4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
+mesh = SubResource("SphereMesh_ggpub")
