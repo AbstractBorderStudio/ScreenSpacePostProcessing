@@ -9,7 +9,12 @@ uniform float _Scale = 1.0;
 uniform float _DepthThreshold = 1.0;
 uniform float _NormalThreshold = 1.0;
 
-float outline(vec2 screen_uv, vec2 screen_size) {
+uniform sampler2D _screen : source_color, hint_screen_texture, filter_linear;
+uniform vec3 _out_color : source_color = vec3(1.0);
+
+
+// understand this VVVVVVVVVVV
+float _outline(vec2 screen_uv, vec2 screen_size) {
 	float halfScaleFloor = floor(_Scale * 0.5);
 	float halfScaleCeil = ceil(_Scale * 0.5);
 
@@ -60,6 +65,7 @@ void vertex() {
 }
 
 void fragment() {
-	float o = outline(SCREEN_UV, VIEWPORT_SIZE);
-	ALBEDO = vec3(o);
+	float outline = _outline(SCREEN_UV, VIEWPORT_SIZE);
+	vec3 _out_col = (outline > 0.1) ? _out_color : vec3(0.0);
+	ALBEDO = mix(texture(_screen, SCREEN_UV).rgb, _out_col, 0.5);
 }
