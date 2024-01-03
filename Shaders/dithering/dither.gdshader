@@ -3,6 +3,7 @@ render_mode unshaded;
 
 group_uniforms Dither;
 uniform sampler2D _pattern : source_color, filter_nearest;
+uniform sampler2D _noise : source_color, filter_nearest;
 uniform float _thresh = 1.0;
 uniform float _dither_scale = 1.0;
 
@@ -20,13 +21,16 @@ void vertex() {
 }
 
 void fragment() {
-	vec3 p = pixelate(_pattern, SCREEN_UV * _dither_scale).rgb;
+	vec2 ratio = normalize(VIEWPORT_SIZE);
+	vec3 p = pixelate(_noise, SCREEN_UV * ratio * _dither_scale).rgb;
 	vec3 s = pixelate(_screen, SCREEN_UV);
 	vec3 o;
-	if (length(s) > length(p) * _thresh)
+	if (length(s) > length(p) * _thresh) {
 		o = s;
-	else
+	}
+	else {
 		o = vec3(0.0);
+	}
 	ALBEDO = o;
 }
 
