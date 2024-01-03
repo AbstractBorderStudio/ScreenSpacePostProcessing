@@ -13,3 +13,7 @@ export_presets.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+Mesh/OBJ format
+Mesh/kenney_conveyor-kit.zip
+Scenes/dithering/sample_dither_visualizer.tscn

@@ -27,5 +27,6 @@ folder_colors={
 "res://Scenes/pixelation/": "green",
 "res://Scripts/": "orange",
 "res://Shaders/": "purple",
-"res://Shaders/pixelation/": "purple"
+"res://Shaders/pixelation/": "purple",
+"res://Textures/": "blue"
 }

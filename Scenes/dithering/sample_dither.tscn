@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://c7oh0i2lchsqc"]
+
+[ext_resource type="Shader" path="res://Shaders/dithering/dither.gdshader" id="1_gl6ot"]
+[ext_resource type="Texture2D" uid="uid://c67as771c4mvn" path="res://Textures/bayer8tile4.png" id="2_h7kqp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tmtg2"]
+render_priority = 0
+shader = ExtResource("1_gl6ot")
+shader_parameter/_thresh = 1.07
+shader_parameter/_dither_scale = 16.0
+shader_parameter/_pattern = ExtResource("2_h7kqp")
+shader_parameter/_scale = 128.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_tq115"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="Environment" id="Environment_f7alt"]
+background_mode = 1
+background_color = Color(0.709804, 0.470588, 1, 1)
+background_energy_multiplier = 0.0
+ambient_light_energy = 0.0
+reflected_light_source = 1
+ssao_enabled = true
+ssao_radius = 16.0
+ssao_intensity = 15.87
+
+[sub_resource type="BoxMesh" id="BoxMesh_ji20w"]
+flip_faces = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_ogbu7"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[node name="Sample Dither" type="Node3D"]
+
+[node name="ScreenSpaceQuad" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_tmtg2")
+extra_cull_margin = 100.0
+mesh = SubResource("QuadMesh_tq115")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_f7alt")
+
+[node name="Room" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_ji20w")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Room"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.257908, 0.216587, 0.354201)
+light_energy = 0.865
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Room"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.355004, -0.118234, 0.410975)
+mesh = SubResource("BoxMesh_ogbu7")
