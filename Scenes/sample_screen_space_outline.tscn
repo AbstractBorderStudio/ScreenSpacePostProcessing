@@ -8,8 +8,8 @@
 render_priority = 0
 shader = ExtResource("1_gxg7d")
 shader_parameter/_Scale = 1.0
-shader_parameter/_DepthThreshold = 0.1
-shader_parameter/_NormalThreshold = 0.005
+shader_parameter/_DepthThreshold = 0.245
+shader_parameter/_NormalThreshold = 0.085
 shader_parameter/_out_color = Color(1, 1, 1, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_5t1uy"]

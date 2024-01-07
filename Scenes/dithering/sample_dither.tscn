@@ -1,19 +1,27 @@
-[gd_scene load_steps=8 format=3 uid="uid://c7oh0i2lchsqc"]
+[gd_scene load_steps=14 format=3 uid="uid://c7oh0i2lchsqc"]
 
-[ext_resource type="Shader" path="res://Shaders/dithering/dither.gdshader" id="1_gl6ot"]
+[ext_resource type="Shader" path="res://Shaders/dithering/pixelated_dither.gdshader" id="1_gl6ot"]
+[ext_resource type="Texture2D" uid="uid://crxlb34j7a516" path="res://Textures/BlueNoise64Tiled.png" id="2_eq6m6"]
 [ext_resource type="Texture2D" uid="uid://c67as771c4mvn" path="res://Textures/bayer8tile4.png" id="2_h7kqp"]
+[ext_resource type="Shader" path="res://Shaders/misc/anim.gdshader" id="3_6ls48"]
+[ext_resource type="Shader" path="res://Shaders/misc/ScreenSpaceVisualization.gdshader" id="4_eddp2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tmtg2"]
 render_priority = 0
 shader = ExtResource("1_gl6ot")
-shader_parameter/_thresh = 1.07
-shader_parameter/_dither_scale = 16.0
-shader_parameter/_pattern = ExtResource("2_h7kqp")
 shader_parameter/_scale = 128.0
+shader_parameter/_thresh = 0.43
+shader_parameter/_dither_scale = 17.43
+shader_parameter/_pattern = ExtResource("2_h7kqp")
+shader_parameter/_noise = ExtResource("2_eq6m6")
 
 [sub_resource type="QuadMesh" id="QuadMesh_tq115"]
 flip_faces = true
 size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lvnma"]
+render_priority = 0
+shader = ExtResource("4_eddp2")
 
 [sub_resource type="Environment" id="Environment_f7alt"]
 background_mode = 1
@@ -28,26 +36,48 @@ ssao_intensity = 15.87
 [sub_resource type="BoxMesh" id="BoxMesh_ji20w"]
 flip_faces = true
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ojsuq"]
+render_priority = 0
+shader = ExtResource("3_6ls48")
+
 [sub_resource type="BoxMesh" id="BoxMesh_ogbu7"]
 size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jis4o"]
 
 [node name="Sample Dither" type="Node3D"]
 
 [node name="ScreenSpaceQuad" type="MeshInstance3D" parent="."]
+visible = false
 material_override = SubResource("ShaderMaterial_tmtg2")
 extra_cull_margin = 100.0
+mesh = SubResource("QuadMesh_tq115")
+
+[node name="ScreenSpaceQuad2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.992228, 0.114937, 0.0476701, -0.11156, 0.991407, -0.0683089, -0.0551117, 0.0624599, 0.996525, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_lvnma")
+extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_tq115")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_f7alt")
 
 [node name="Room" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("BoxMesh_ji20w")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Room"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.257908, 0.216587, 0.354201)
-light_energy = 0.865
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Room"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.355004, -0.118234, 0.410975)
+material_override = SubResource("ShaderMaterial_ojsuq")
 mesh = SubResource("BoxMesh_ogbu7")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Room/MeshInstance3D"]
+libraries = {
+"": SubResource("AnimationLibrary_jis4o")
+}
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Room"]
+transform = Transform3D(0.725014, 0.565622, 0.392971, 2.98023e-08, -0.57057, 0.821249, 0.688734, -0.595417, -0.413671, 0.409057, 1.01818, -0.401489)
+light_energy = 1.91
+light_indirect_energy = 1.054
+shadow_enabled = true
+spot_angle = 20.9867
