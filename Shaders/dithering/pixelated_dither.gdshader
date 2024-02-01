@@ -30,7 +30,7 @@ void fragment() {
 	
 	
 	vec2 ratio = normalize(VIEWPORT_SIZE);
-	vec3 p = texture(_pattern, SCREEN_UV * ratio * _dither_scale).rgb;
+	vec3 p = texture(_pattern, SCREEN_UV * ratio / _dither_scale).rgb;
 	vec3 n = texture(_noise, SCREEN_UV * ratio * _dither_scale).rgb;
 	vec3 s = pixelate(_screen, SCREEN_UV);
 	float lum = (s.r * 0.299) + (s.g * 0.587) + (s.b * 0.114);

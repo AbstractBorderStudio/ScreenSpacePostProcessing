@@ -4,14 +4,16 @@
 [ext_resource type="Texture2D" uid="uid://crxlb34j7a516" path="res://Textures/BlueNoise64Tiled.png" id="2_eq6m6"]
 [ext_resource type="Texture2D" uid="uid://c67as771c4mvn" path="res://Textures/bayer8tile4.png" id="2_h7kqp"]
 [ext_resource type="Shader" path="res://Shaders/misc/anim.gdshader" id="3_6ls48"]
-[ext_resource type="Shader" path="res://Shaders/misc/ScreenSpaceVisualization.gdshader" id="4_eddp2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tmtg2"]
 render_priority = 0
 shader = ExtResource("1_gl6ot")
-shader_parameter/_scale = 128.0
-shader_parameter/_thresh = 0.43
-shader_parameter/_dither_scale = 17.43
+shader_parameter/_shadow_col = Color(0, 0, 0, 1)
+shader_parameter/_shadow_strength = 1.0
+shader_parameter/_scale = 256.0
+shader_parameter/_thresh = 0.5
+shader_parameter/_dither_scale = 100.0
+shader_parameter/bits = 32
 shader_parameter/_pattern = ExtResource("2_h7kqp")
 shader_parameter/_noise = ExtResource("2_eq6m6")
 
@@ -19,9 +21,76 @@ shader_parameter/_noise = ExtResource("2_eq6m6")
 flip_faces = true
 size = Vector2(2, 2)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lvnma"]
+[sub_resource type="Shader" id="Shader_bud80"]
+code = "shader_type spatial;
+render_mode unshaded;
+
+group_uniforms Misc;
+uniform vec3 _shadow_col : source_color = vec3(0.0);
+uniform float _shadow_strength = 1.0;
+
+group_uniforms Pixelation;
+uniform float _scale = 256.0;
+uniform sampler2D _screen : hint_screen_texture, filter_nearest;
+group_uniforms Dither;
+uniform sampler2D _pattern : source_color, filter_nearest, repeat_enable;
+uniform sampler2D _noise : source_color, filter_nearest;
+uniform float _thresh = 1.0;
+uniform float _dither_scale = 1.0;
+uniform int bits = 1;
+
+vec3 pixelate(sampler2D tex, vec2 uv) {
+	uv = floor(uv * _scale) / _scale;
+	return texture(tex, uv).rgb;
+}
+
+void vertex() {
+	// set the quad full screen
+	//POSITION = vec4(VERTEX, 1.0);
+}
+
+void fragment() {
+	vec4 p_s = textureProj(_pattern, vec3(1.0));
+	
+	
+	vec2 ratio = normalize(VIEWPORT_SIZE);
+	vec3 p = texture(_pattern, SCREEN_UV * ratio * _dither_scale).rgb;
+	vec3 n = texture(_noise, SCREEN_UV * ratio * _dither_scale).rgb;
+	vec3 s = pixelate(_screen, SCREEN_UV);
+	float lum = (s.r * 0.299) + (s.g * 0.587) + (s.b * 0.114);
+	float sh = (p.r * 0.299) + (p.g * 0.587) + (p.b * 0.114);
+	float nh = (n.r * 0.299) + (n.g * 0.587) + (n.b * 0.114);
+	
+	lum = floor(lum * float(bits)) / float(bits);
+	
+	vec3 o;
+	if (lum > sh * _thresh) {
+		o = s;
+	}
+	else {
+		o = _shadow_col * _shadow_strength;
+	}
+	ALBEDO = o;
+	
+	//ALBEDO = textureProj(_screen, 1.0 -VERTEX).rgb;
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the material.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pulg0"]
 render_priority = 0
-shader = ExtResource("4_eddp2")
+shader = SubResource("Shader_bud80")
+shader_parameter/_shadow_col = Color(0, 0, 0, 1)
+shader_parameter/_shadow_strength = 1.0
+shader_parameter/_scale = 256.0
+shader_parameter/_thresh = 0.4
+shader_parameter/_dither_scale = 15.0
+shader_parameter/bits = 128
+shader_parameter/_pattern = ExtResource("2_h7kqp")
 
 [sub_resource type="Environment" id="Environment_f7alt"]
 background_mode = 1
@@ -48,22 +117,20 @@ size = Vector3(0.2, 0.2, 0.2)
 [node name="Sample Dither" type="Node3D"]
 
 [node name="ScreenSpaceQuad" type="MeshInstance3D" parent="."]
-visible = false
 material_override = SubResource("ShaderMaterial_tmtg2")
 extra_cull_margin = 100.0
 mesh = SubResource("QuadMesh_tq115")
 
 [node name="ScreenSpaceQuad2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.992228, 0.114937, 0.0476701, -0.11156, 0.991407, -0.0683089, -0.0551117, 0.0624599, 0.996525, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_lvnma")
-extra_cull_margin = 16384.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
+material_override = SubResource("ShaderMaterial_pulg0")
 mesh = SubResource("QuadMesh_tq115")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_f7alt")
 
 [node name="Room" type="MeshInstance3D" parent="."]
-visible = false
 mesh = SubResource("BoxMesh_ji20w")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Room"]
@@ -76,8 +143,9 @@ libraries = {
 }
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Room"]
-transform = Transform3D(0.725014, 0.565622, 0.392971, 2.98023e-08, -0.57057, 0.821249, 0.688734, -0.595417, -0.413671, 0.409057, 1.01818, -0.401489)
+transform = Transform3D(0.728735, 0.543455, 0.416655, 0.248418, -0.776787, 0.578698, 0.638148, -0.318213, -0.701076, 0.798522, 1.17126, -1.53125)
 light_energy = 1.91
 light_indirect_energy = 1.054
 shadow_enabled = true
-spot_angle = 20.9867
+spot_range = 7.688
+spot_angle = 14.01
