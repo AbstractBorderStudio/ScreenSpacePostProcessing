@@ -30,12 +30,12 @@ void fragment() {
 	
 	
 	vec2 ratio = normalize(VIEWPORT_SIZE);
-	vec3 p = texture(_pattern, SCREEN_UV * ratio / _dither_scale).rgb;
-	vec3 n = texture(_noise, SCREEN_UV * ratio * _dither_scale).rgb;
+	vec3 p = texture(_pattern, SCREEN_UV * _dither_scale * ratio).rgb;
+	vec3 n = texture(_noise, SCREEN_UV * _dither_scale).rgb;
 	vec3 s = pixelate(_screen, SCREEN_UV);
-	float lum = (s.r * 0.299) + (s.g * 0.587) + (s.b * 0.114);
-	float sh = (p.r * 0.299) + (p.g * 0.587) + (p.b * 0.114);
-	float nh = (n.r * 0.299) + (n.g * 0.587) + (n.b * 0.114);
+	float lum = (s.r * 0.299) + (s.g * 0.587) + (s.b * 0.114); // luminosity of screen texture pixel
+	float sh = (p.r * 0.299) + (p.g * 0.587) + (p.b * 0.114); // luminosity of bayer pattern pixel
+	float nh = (n.r * 0.299) + (n.g * 0.587) + (n.b * 0.114); // luminosity of noise pixel
 	
 	lum = floor(lum * float(bits)) / float(bits);
 	

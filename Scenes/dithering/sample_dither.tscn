@@ -11,9 +11,9 @@ shader = ExtResource("1_gl6ot")
 shader_parameter/_shadow_col = Color(0, 0, 0, 1)
 shader_parameter/_shadow_strength = 1.0
 shader_parameter/_scale = 256.0
-shader_parameter/_thresh = 0.5
-shader_parameter/_dither_scale = 100.0
-shader_parameter/bits = 32
+shader_parameter/_thresh = 0.465
+shader_parameter/_dither_scale = 15.0
+shader_parameter/bits = 50
 shader_parameter/_pattern = ExtResource("2_h7kqp")
 shader_parameter/_noise = ExtResource("2_eq6m6")
 
@@ -122,7 +122,6 @@ extra_cull_margin = 100.0
 mesh = SubResource("QuadMesh_tq115")
 
 [node name="ScreenSpaceQuad2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 visible = false
 material_override = SubResource("ShaderMaterial_pulg0")
 mesh = SubResource("QuadMesh_tq115")
